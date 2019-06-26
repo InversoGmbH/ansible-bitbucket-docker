@@ -1,0 +1,63 @@
+---
+# tasks file for inverso.bitbucket-docker
+
+- name: check required variables
+  assert:
+    that:
+      - bitbucket_data_dir                 | mandatory
+      - bitbucket_version                  | mandatory
+      - bitbucket_jvm_min_mem              | mandatory
+      - bitbucket_jvm_max_mem              | mandatory
+      - bitbucket_support_recommended_args | mandatory
+      - bitbucket_servername               | mandatory
+  tags: ['varcheck']
+
+- name: ensure docker is present
+  package:
+    name: docker
+    state: present
+
+- name: ensure docker is started and enabled
+  systemd:
+    name: docker
+    enabled: yes
+    state: started
+
+- name: install ansible docker dependencies
+  pip:
+    name: docker-py
+    state: present
+
+- name: create bitbucket data dir on docker host
+  file:
+    path: '{{ bitbucket_data_dir }}'
+    state: directory
+
+- name: ensure system cacerts file is also present for bitbucket
+  copy:
+    src: '/etc/pki/java/cacerts'
+    dest: '{{ bitbucket_data_dir }}/'
+    remote_src: yes
+
+- name: create bitbucket container
+  docker_container:
+    name: 'bitbucket'
+    hostname: 'bitbucket'
+    image: "{{ bitbucket_image_registry }}{{ bitbucket_image_registry | ternary('/','') }}{{ bitbucket_image_name }}:{{ bitbucket_version }}"
+    state: started
+    restart_policy: unless-stopped
+    cacert_path: '/etc/pki/tls/certs/ca-bundle.crt'
+    network_mode: host
+    volumes:
+      - '{{ bitbucket_data_dir }}:/var/atlassian/application-data/bitbucket'
+    env:
+      LANG: 'de_DE.utf8'
+      JVM_MINIMUM_MEMORY: '{{ bitbucket_jvm_min_mem }}'
+      JVM_MAXIMUM_MEMORY: '{{ bitbucket_jvm_max_mem }}'
+      JVM_SUPPORT_RECOMMENDED_ARGS: '{{ bitbucket_support_recommended_args }}'
+      CATALINA_CONTEXT_PATH: '{{ bitbucket_webappcontextpath }}'
+      SERVER_CONTEXT_PATH: '{{ bitbucket_webappcontextpath }}'
+      SERVER_SECURE: '{{ bitbucket_revproxy_secure }}'
+      SERVER_SCHEME: '{{ bitbucket_revproxy_scheme }}'
+      SERVER_PROXY_PORT: '{{ bitbucket_revproxy_port }}'
+      SERVER_PROXY_NAME: '{{ bitbucket_revproxy_name }}'
