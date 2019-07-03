@@ -8,6 +8,8 @@ bitbucket_version               : '5.16.0'
 bitbucket_image_registry        : ''
 bitbucket_image_name            : 'atlassian/bitbucket-server'
 
+bitbucket_service_enabled       : 'yes'
+
 bitbucket_jvm_min_mem           : '2048m'
 bitbucket_jvm_max_mem           : '3072m'
 bitbucket_webappcontextpath     : '/bitbucket'
