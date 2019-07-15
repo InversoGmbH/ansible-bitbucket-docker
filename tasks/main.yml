@@ -65,7 +65,7 @@
   register: _return_container
 
 - name: ensure unused docker images are absent
-  command: docker prune image
+  command: docker image prune -fa
   when: _return_container is changed
-#  docker_prune:
+#  docker_prune: requires newer docker and python api
 #    images: yes
