@@ -62,3 +62,7 @@
       SERVER_SCHEME: '{{ bitbucket_revproxy_scheme }}'
       SERVER_PROXY_PORT: '{{ bitbucket_revproxy_port }}'
       SERVER_PROXY_NAME: '{{ bitbucket_revproxy_name }}'
+
+- name: ensure unused docker images are absent
+  docker_prune:
+    images: yes
