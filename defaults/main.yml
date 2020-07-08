@@ -27,7 +27,7 @@ bitbucket_proxy_nonProxyHosts   : 'localhost\|127.0.0.1\|{{ ansible_default_ipv4
 # bitbucket_jmx_port                     : 8099
 # bitbucket_jmx_args                     : '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port={{ bitbucket_jmx_port }} -Dcom.sun.management.jmxremote.authenticate=true -Dcom.sun.management.jmxremote.password.file=/home/{{ bitbucket_jmx_user }}/jmxremote.password -Dcom.sun.management.jmxremote.access.file=/home/{{ bitbucket_jmx_user }}/jmxremote.access -Dcom.sun.management.jmxremote.ssl=false'
 
-bitbucket_support_recommended_args: >
+bitbucket_support_recommended_args: |
   -Duser.timezone=Europe/Berlin
   -Duser.region=DE
   -Duser.country=DE

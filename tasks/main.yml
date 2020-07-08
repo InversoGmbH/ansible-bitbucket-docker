@@ -55,7 +55,7 @@
       LANG: 'de_DE.utf8'
       JVM_MINIMUM_MEMORY: '{{ bitbucket_jvm_min_mem }}'
       JVM_MAXIMUM_MEMORY: '{{ bitbucket_jvm_max_mem }}'
-      JVM_SUPPORT_RECOMMENDED_ARGS: '{{ bitbucket_support_recommended_args }}'
+      JVM_SUPPORT_RECOMMENDED_ARGS: "{{ bitbucket_support_recommended_args | replace('\n',' ') }}"
       CATALINA_CONTEXT_PATH: '{{ bitbucket_webappcontextpath }}'
       SERVER_CONTEXT_PATH: '{{ bitbucket_webappcontextpath }}'
       SERVER_SECURE: '{{ bitbucket_revproxy_secure }}'
